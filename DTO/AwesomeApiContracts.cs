@@ -9,4 +9,6 @@ public class AwesomeApiContracts
      string High, string Low, string VarBid,
       string PctChange, string Bid, string Ask, string Timestamp,
       [property: JsonPropertyName("create_date")] string CreateDate );
+
+      
 }

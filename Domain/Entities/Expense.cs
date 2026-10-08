@@ -6,7 +6,7 @@ namespace BackEnd.Domain;
 
 public class Expense
 {
-    private Expense(int userId, int categoryId, string description, decimal amount, DateOnly date)
+private Expense(int userId, int categoryId, string description, decimal amount, DateOnly date)
     {
         UserId = userId;
         CategoryId = categoryId;
