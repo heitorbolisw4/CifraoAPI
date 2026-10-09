@@ -22,13 +22,13 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-var awesomeApiKey = builder.Configuration["AwesomeApi:Key"] ?? throw new InvalidOperationException("AwesomeApi:Key não configurada");
-
+var awesomeApiKey = builder.Configuration["AwesomeApi:ApiKey"] ?? throw new InvalidOperationException("AwesomeApi:Key não configurada");
+var awesomeUrl = builder.Configuration["AwesomeApi:BaseUrl"] ?? throw new InvalidOperationException("URL nao configurada");
 builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IExchangeRateService, AwesomeApiService>( x =>
 {
-    x.BaseAddress = new Uri("https://economia.awesomeapi.com.br/");
+    x.BaseAddress = new Uri(awesomeUrl);
     x.DefaultRequestHeaders.Add("x-api-key", awesomeApiKey);
 });
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();

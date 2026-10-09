@@ -10,7 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories {get; set;}
     public DbSet<Expense> Expenses {get; set;}
-    public DbSet<ExchangeRates> ExchangeRates { get; set; }
+    public DbSet<ExchangeRate> ExchangeRates { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,7 +64,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
            entity.HasOne( x => x.User).WithMany( y => y.Expenses).HasForeignKey(x => x.UserId);
         });
 
-        modelBuilder.Entity<ExchangeRates>( entity =>
+        modelBuilder.Entity<ExchangeRate>( entity =>
         {
             entity.HasKey( x => x.Id);
             entity.Property( x => x.BaseCurrency ).HasMaxLength(3);
