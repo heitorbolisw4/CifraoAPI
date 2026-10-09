@@ -24,6 +24,7 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 var awesomeApiKey = builder.Configuration["AwesomeApi:ApiKey"] ?? throw new InvalidOperationException("AwesomeApi:Key não configurada");
 var awesomeUrl = builder.Configuration["AwesomeApi:BaseUrl"] ?? throw new InvalidOperationException("URL nao configurada");
+builder.Services.AddScoped<ExchangeRateAppService>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddHttpClient<IExchangeRateService, AwesomeApiService>( x =>
