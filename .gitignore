@@ -485,7 +485,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-"APP.DB" 
-"app.db" 
-"app.db-shm" 
-"app.db-wall" 
+
+app.db 
+app.db-shm 
+app.db-wall 
