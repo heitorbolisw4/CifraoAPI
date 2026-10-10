@@ -31,6 +31,7 @@ builder.Services.AddHttpClient<IExchangeRateService, AwesomeApiService>( x =>
 {
     x.BaseAddress = new Uri(awesomeUrl);
     x.DefaultRequestHeaders.Add("x-api-key", awesomeApiKey);
+    x.Timeout = TimeSpan.FromMinutes(3);
 });
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddExceptionHandler<ExternalApiExceptionHandler>();

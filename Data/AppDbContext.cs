@@ -73,7 +73,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property( x => x.Ask ).HasColumnType("decimal(18,6)");
             entity.Property( x => x.Source ).IsRequired().HasMaxLength(30);
 
-            entity.HasIndex(x =>  new {x.BaseCurrency, x.QuoteCurrency, x.RateDate}).IsUnique();
+            //entity.HasIndex(x =>  new {x.BaseCurrency, x.QuoteCurrency, x.RateDate}).IsUnique();
         });
     }
 }
