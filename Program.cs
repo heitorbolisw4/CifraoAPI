@@ -93,6 +93,7 @@ builder.Services.AddSwaggerGen( options =>
 
 
 var app = builder.Build();
+app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -104,7 +105,6 @@ app.UseCors("FrontEnd");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseExceptionHandler();
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapExpenseEndpoints();
