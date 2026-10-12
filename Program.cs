@@ -14,7 +14,6 @@ using BackEnd.EndPoints.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var connectionStrings = builder.Configuration.GetConnectionString("AppDb");
@@ -31,7 +30,7 @@ builder.Services.AddHttpClient<IExchangeRateService, AwesomeApiService>( x =>
 {
     x.BaseAddress = new Uri(awesomeUrl);
     x.DefaultRequestHeaders.Add("x-api-key", awesomeApiKey);
-    x.Timeout = TimeSpan.FromMinutes(3);
+    x.Timeout = TimeSpan.FromSeconds(10);
 });
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 builder.Services.AddExceptionHandler<ExternalApiExceptionHandler>();

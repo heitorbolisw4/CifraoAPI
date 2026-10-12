@@ -72,7 +72,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property( x => x.Bid ).HasColumnType("decimal(18,6)");
             entity.Property( x => x.Ask ).HasColumnType("decimal(18,6)");
             entity.Property( x => x.Source ).IsRequired().HasMaxLength(30);
-
+            entity.Property( x => x.FetchedAt).HasConversion( value => value.Kind == DateTimeKind.Utc 
+                ? value : value.ToUniversalTime(),
+                // tentar ler em UTC
+                value => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+            );
             //entity.HasIndex(x =>  new {x.BaseCurrency, x.QuoteCurrency, x.RateDate}).IsUnique();
         });
     }

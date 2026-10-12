@@ -16,30 +16,19 @@ public static class ExchangeEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetAwesome(AppDbContext db, ExchangeRateAppService service, CancellationToken ct)
+    private static async Task<IResult> GetAwesome(ExchangeRateAppService service, CancellationToken ct)
     {
-        var limite = DateTime.UtcNow.AddMinutes(-5);
         var pair = "USD-BRL";
         
+        var rate = await service.GetOrFetchAsync(pair, ct);
         
-        var cached = await db.ExchangeRates.Where(x => x.BaseCurrency == "USD" 
-        && x.QuoteCurrency == "BRL" 
-        && x.FetchedAt >= limite).OrderByDescending( x => x.FetchedAt ).FirstOrDefaultAsync();
-        
-        if ( cached is not null )
-            return Results.Ok(cached);
-
-
-
-        var rate = await service.FetchAndSaveAsync(pair, ct);
-        
-        return rate is null ? Results.NotFound() : Results.Ok(rate);
+        return rate is null ? Results.NotFound() : Results.Ok(ToResponse(rate));
         
     }
     private static async Task<IResult> SaveRate(string pair, ExchangeRateAppService service, CancellationToken ct)
     {
         var rate = await service.FetchAndSaveAsync(pair, ct);
-        return rate is null ? Results.NotFound() : Results.Created($"/exchange/{rate.Id}", rate);
+        return rate is null ? Results.NotFound() : Results.Created($"/exchange/{rate.Id}", ToResponse(rate));
     }
     private static ExchangeRatesResponse ToResponse(ExchangeRate exchangeRate)
     {

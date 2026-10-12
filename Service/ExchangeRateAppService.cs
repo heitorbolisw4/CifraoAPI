@@ -2,6 +2,7 @@ using System.Globalization;
 using BackEnd.Data;
 using BackEnd.Domain.Entities;
 using BackEnd.Domain.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Service;
 
@@ -29,6 +30,34 @@ public class ExchangeRateAppService(AppDbContext db, IExchangeRateService servic
         return rate;
     
     
+    }
+    public async Task<ExchangeRate?> GetOrFetchAsync(string pair, CancellationToken ct)
+    {
+        var limite = DateTime.UtcNow.AddHours(-24);
+        var parts = pair.Split('-');
+        var baseCur = parts[0];
+        var quoteCur = parts[1];
+
+        var cached = await db.ExchangeRates.Where(x => x.BaseCurrency == baseCur 
+        && x.QuoteCurrency == quoteCur
+        && x.FetchedAt >= limite).OrderByDescending( x => x.FetchedAt ).FirstOrDefaultAsync(ct);
+        
+        if ( cached is not null )
+            return cached;
+
+        try
+        {
+            return await FetchAndSaveAsync(pair, ct);
+            
+        }
+        catch (Exception ex) when ( ex is HttpRequestException or TaskCanceledException)
+        {
+            var lastRate = await db.ExchangeRates.Where(x => x.BaseCurrency == baseCur
+            && x.QuoteCurrency == quoteCur)
+            .OrderByDescending(x => x.FetchedAt).FirstOrDefaultAsync(ct);
+            if(lastRate is null ) throw;
+            return lastRate;
+        }
     }
     
 }
