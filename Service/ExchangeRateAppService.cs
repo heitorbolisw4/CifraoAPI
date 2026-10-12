@@ -33,7 +33,7 @@ public class ExchangeRateAppService(AppDbContext db, IExchangeRateService servic
     }
     public async Task<ExchangeRate?> GetOrFetchAsync(string pair, CancellationToken ct)
     {
-        var limite = DateTime.UtcNow.AddSeconds(-1);
+        var limite = DateTime.UtcNow.AddHours(-24);
         var parts = pair.Split('-');
         var baseCur = parts[0];
         var quoteCur = parts[1];

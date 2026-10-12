@@ -55,11 +55,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
     };
 });
+
+var origins = builder.Configuration.GetSection("Cors:AllowedOrigns").Get<string[]>() ?? [];
+
 builder.Services.AddCors( options =>
 {
     options.AddPolicy("FrontEnd", policy =>
     {
-       policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); 
+       policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod(); 
     });
 
 
