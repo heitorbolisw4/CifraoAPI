@@ -14,9 +14,9 @@
 *.sln.docstates
 
 #sqlite 3
-.db-shm
-.db-wal
-.db
+*.db-shm
+*.db-wal
+*.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -488,4 +488,4 @@ $RECYCLE.BIN/
 
 app.db 
 app.db-shm 
-app.db-wall 
+app.db-wal

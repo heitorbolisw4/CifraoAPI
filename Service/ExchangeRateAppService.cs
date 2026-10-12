@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BackEnd.Service;
 
 
-public class ExchangeRateAppService(AppDbContext db, IExchangeRateService service)
+public class ExchangeRateAppService(AppDbContext db, IExchangeRateService service, ILogger<ExchangeRateAppService> logger)
 {
     public async Task<ExchangeRate?> FetchAndSaveAsync(string pair, CancellationToken ct)
     {
@@ -33,7 +33,7 @@ public class ExchangeRateAppService(AppDbContext db, IExchangeRateService servic
     }
     public async Task<ExchangeRate?> GetOrFetchAsync(string pair, CancellationToken ct)
     {
-        var limite = DateTime.UtcNow.AddHours(-24);
+        var limite = DateTime.UtcNow.AddSeconds(-1);
         var parts = pair.Split('-');
         var baseCur = parts[0];
         var quoteCur = parts[1];
@@ -56,6 +56,7 @@ public class ExchangeRateAppService(AppDbContext db, IExchangeRateService servic
             && x.QuoteCurrency == quoteCur)
             .OrderByDescending(x => x.FetchedAt).FirstOrDefaultAsync(ct);
             if(lastRate is null ) throw;
+            logger.LogWarning(ex, "AwesomeAPI falhou. Usando cotação salva de {FetchedAt}", lastRate.FetchedAt);
             return lastRate;
         }
     }
